@@ -11,4 +11,8 @@ class Game extends Model
     {
         return static::where('name', 'LIKE', '%' . $q . '%')->get(); 
     }
+    public static function getByID($id, $idsection=false, $name=false)
+    {
+        return static::where('id', $id)->first();
+    }
 }

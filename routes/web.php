@@ -30,13 +30,15 @@ Route::get('/allSliders','SlidersController@listSliders');
 
 Route::get('/search-game','GameController@searchGame');
 
+Route::get('/listex','ExchangeController@listEx');
+
 Route::get('/', function () {
     abort(404, 'Page not found');
 });
 
-Auth::routes();
+Route::post('/login','AuthController@login');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/register','AuthController@register');
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
