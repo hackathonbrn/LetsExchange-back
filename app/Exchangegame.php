@@ -16,14 +16,14 @@ class Exchangegame extends Model
     {
         return $this->belongsTo('App\Game', 'gamehave_id', 'id');
     }
-    public static function getAllExch($section, $game1 = false, $game2 = false)
+    public static function getAllExch($id_console, $game1 = false, $game2 = false, $user_id)
     {
         global $section_id, $wish, $have;
-        $section_id = $section;
+        $section_id = $id_console;
         $wish = $game1;
         $have = $game2;
         if($wish && $have){
-            return static::whereHas('game', function ($query) {
+            return static::where('user_id', '!=', $user_id)->whereHas('game', function ($query) {
                 global $section_id, $wish;
                 $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $wish . '%');
             })->whereHas('game2', function ($query) {
@@ -31,7 +31,7 @@ class Exchangegame extends Model
                 $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $have . '%');
             })->get();
         }elseif($wish){
-            return static::whereHas('game', function ($query) {
+            return static::where('user_id', '!=', $user_id)->whereHas('game', function ($query) {
                 global $section_id, $wish;
                 $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $wish . '%');
             })->whereHas('game2', function ($query) {
@@ -39,7 +39,7 @@ class Exchangegame extends Model
                 $query->where('categori_id', $section_id);
             })->get();
         }elseif($have){
-            return static::whereHas('game', function ($query) {
+            return static::where('user_id', '!=', $user_id)->whereHas('game', function ($query) {
                 global $section_id;
                 $query->where('categori_id', $section_id);
             })->whereHas('game2', function ($query) {
@@ -47,7 +47,7 @@ class Exchangegame extends Model
                 $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $have . '%');
             })->get();
         }else{
-            return static::whereHas('game', function ($query) {
+            return static::where('user_id', '!=', $user_id)->whereHas('game', function ($query) {
                 global $section_id;
                 $query->where('categori_id', $section_id);
             })->whereHas('game2', function ($query) {

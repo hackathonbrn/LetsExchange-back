@@ -55,6 +55,7 @@ class AuthController extends Controller
     {
         $id = $request->id;
         $id_console = $request->id_console;
+        
         if(!empty($id_console)){
             User::where('id', $id)
                 ->update(['console_id' => $id_console]);
