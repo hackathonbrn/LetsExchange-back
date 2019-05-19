@@ -8,7 +8,7 @@ use App\Game;
 
 class Exchangegame extends Model
 {
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'gamewish_id', 'gamehave_id', 'phone', 'description'];
     public function game()
     {
         return $this->belongsTo('App\Game', 'gamewish_id', 'id');
