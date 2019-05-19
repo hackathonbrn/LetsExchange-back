@@ -10,4 +10,8 @@ class Category extends Model
     {
         return static::all(); 
     }
+    public static function getByConsole($id)
+    {
+        return static::where('id',$id)->get(); 
+    } 
 }

@@ -36,6 +36,8 @@ Route::get('/', function () {
     abort(404, 'Page not found');
 });
 
+Route::post('/setConsole','AuthController@updateConsole');
+
 Route::post('/login','AuthController@login');
 
 Route::post('/register','AuthController@register');

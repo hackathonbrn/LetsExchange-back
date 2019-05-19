@@ -13,7 +13,7 @@ class ExchangeController extends Controller
 {
     public function listEx(Request $request)
     {
-        $idsection = $request->input('id_sec');
+        $idsection = $request->input('id_console');
         
         $game1 = $request->input('game_wish');
         $game2 = $request->input('game_have');

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Category;
 
 class AuthController extends Controller
 {
@@ -42,9 +43,24 @@ class AuthController extends Controller
         $password = $request->password;
         if ($status = Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = Auth::user();
-            return response()->json(['success' => true, 'status' => $status, 'user'=>$user]);
+            if(!empty($user->console_id)){
+                $console = Category::getByConsole($user->console_id);
+            }
+            return response()->json(['success' => true, 'status' => $status, 'user'=>$user, 'console' => $console]);
         }else{
             return response()->json(['success' => false, 'error' => 'noAuth']);
+        }
+    }
+    public function updateConsole(Request $request)
+    {
+        $id = $request->id;
+        $id_console = $request->id_console;
+        if(!empty($id_console)){
+            User::where('id', $id)
+                ->update(['console_id' => $id_console]);
+            return response()->json(['success' => true]);
+        }else{
+            return response()->json(['success' => false]);
         }
     }
 }

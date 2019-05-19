@@ -8,23 +8,52 @@ use App\Game;
 
 class Exchangegame extends Model
 {
+    public function game()
+    {
+        return $this->belongsTo('App\Game', 'gamewish_id', 'id');
+    }
+    public function game2()
+    {
+        return $this->belongsTo('App\Game', 'gamehave_id', 'id');
+    }
     public static function getAllExch($section, $game1 = false, $game2 = false)
     {
-        if($game1 && $game2){
-            return static::where('gamewish_id', $game1)->where('gamehave_id', $game2)
-            ->leftJoin('games', 'exchangegames.gamewish_id', '=', 'games.id')
-            ->where('categori_id', $section)->get();
-        }elseif($game1){
-            return static::where('gamewish_id', $game1)
-            ->leftJoin('games', 'exchangegames.gamewish_id', '=', 'games.id')
-            ->where('categori_id', $section)->get();
-        }elseif($game2){
-            return static::where('gamehave_id', $game2)
-            ->leftJoin('games', 'exchangegames.gamehave_id', '=', 'games.id')
-            ->where('categori_id', $section)->get();
+        global $section_id, $wish, $have;
+        $section_id = $section;
+        $wish = $game1;
+        $have = $game2;
+        if($wish && $have){
+            return static::whereHas('game', function ($query) {
+                global $section_id, $wish;
+                $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $wish . '%');
+            })->whereHas('game2', function ($query) {
+                global $section_id, $have;
+                $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $have . '%');
+            })->get();
+        }elseif($wish){
+            return static::whereHas('game', function ($query) {
+                global $section_id, $wish;
+                $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $wish . '%');
+            })->whereHas('game2', function ($query) {
+                global $section_id;
+                $query->where('categori_id', $section_id);
+            })->get();
+        }elseif($have){
+            return static::whereHas('game', function ($query) {
+                global $section_id;
+                $query->where('categori_id', $section_id);
+            })->whereHas('game2', function ($query) {
+                global $section_id, $have;
+                $query->where('categori_id', $section_id)->where('name', 'LIKE', '%' . $have . '%');
+            })->get();
         }else{
-            return static::leftJoin('games', 'exchangegames.gamewish_id', '=', 'games.id')
-            ->where('categori_id', $section)->get();
-        }   
+            return static::whereHas('game', function ($query) {
+                global $section_id;
+                $query->where('categori_id', $section_id);
+            })->whereHas('game2', function ($query) {
+                global $section_id;
+                $query->where('categori_id', $section_id);
+            })->get();
+        }
     }
 }
