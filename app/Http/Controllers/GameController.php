@@ -13,13 +13,13 @@ class GameController extends Controller
         $query = $request->input('query');
         $id_console = $request->input('id_console');
 
-        $noArray = array('name'=>'Ничего не найдено');
+        $noArray = array('success'=>false, 'mess'=>'Ничего не найдено');
         if(!empty($query)){
             $objSerch = Game::SearchName($query, $id_console);
             if(empty(json_decode($objSerch))){
                 return json_encode($noArray);
             }else{
-                return $objSerch;
+                return array('success'=>true, 'exch'=>$objSerch);
             }
         }
     }

@@ -51,7 +51,7 @@ class ExchangeController extends Controller
 
         if($user_id && $wish_id && $have_id && $phone){
             $exchange = Exchangegame::create([
-                'user_id' => $user_id, 
+                'user_id' => (int)$user_id, 
                 'gamewish_id' => $wish_id, 
                 'gamehave_id' => $have_id,
                 'phone' => $phone,
@@ -59,7 +59,7 @@ class ExchangeController extends Controller
             ]);
         }
         
-        if($exchange){
+        if(!empty($exchange)){
             return response()->json(['success' => true, 'exch' => $exchange]);
         }else{
             return response()->json(['success' => false, 'error' => "noAddExchange"]);
